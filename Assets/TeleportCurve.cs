@@ -24,14 +24,14 @@ public class TeleportCurve : MonoBehaviour
     {
         teleportCirclelUI.gameObject.SetActive(false);
         lr = GetComponent<LineRenderer>();
-        lr.startwidth = 0.0f;
+        lr.startWidth = 0.0f;
         lr.endWidth = 0.2f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ARAVRInput.GetDown(ARAVRInput.GetDown.HandTrigger, ARAVRInput.Controller.RTouch))
+        if (ARAVRInput.GetDown(ARAVRInput.Button.HandTrigger, ARAVRInput.Controller.RTouch))
         {
             lr.enabled = true;
         }
@@ -85,7 +85,7 @@ private bool ChekHitRay(Vector3 lastPos, ref Vector3 pos)
     Vector3 rayDir = pos - lastPos;
     Ray ray = new Ray(lastPos, rayDir);
     RaycastHit hitInfo;
-    if (Physics.Raycast(ray, out hitinfo, rayDir.magnitude))
+    if (Physics.Raycast(ray, out hitInfo, rayDir.magnitude))
     {
         pos = hitInfo.point;
         int layer = LayerMask.NameToLayer("Terrain");
@@ -93,8 +93,8 @@ private bool ChekHitRay(Vector3 lastPos, ref Vector3 pos)
         {
             teleportCirclelUI.gameObject.SetActive(true);
             teleportCirclelUI.position = pos;
-            teleportCirclelUI.forward = hitInfo.normal;
-            teleportCirclelUI.localScale = originScale * Mathf.Max(1, Vector3.Distance);
+            float distance = Vector3.Distance(lastPos, pos); 
+            teleportCirclelUI.localScale = originScale * Mathf.Max(1f, distance);
         }
         return true;
     }
